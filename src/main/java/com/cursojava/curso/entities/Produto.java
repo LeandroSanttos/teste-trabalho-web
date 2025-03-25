@@ -40,7 +40,7 @@ public class Produto implements Serializable {
 	public Produto() {
 	}
 
-	public Produto(Long id, String nome, String descricao, Double preco, String img_URL) {
+	public Produto(Long id, String nome, String descricao, Double preco, String img_URL) throws IllegalArgumentException {
 		super();
 		this.id = id;
 		this.nome = nome;

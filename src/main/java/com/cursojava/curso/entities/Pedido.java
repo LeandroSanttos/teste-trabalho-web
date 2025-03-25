@@ -47,7 +47,7 @@ public class Pedido implements Serializable {
     public Pedido() {
     }
 
-    public Pedido(Long id, Instant momento, PedidoStatus pedidoStatus, Usuario cliente) {
+    public Pedido(Long id, Instant momento, PedidoStatus pedidoStatus, Usuario cliente) throws IllegalArgumentException {
         super();
         this.id = id;
         this.momento = momento;

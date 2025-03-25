@@ -31,7 +31,7 @@ public class Pagamento implements Serializable {
     public Pagamento() {
     }
 
-    public Pagamento(Long id, Instant momento, Pedido pedido) {
+    public Pagamento(Long id, Instant momento, Pedido pedido) throws IllegalArgumentException {
         this.id = id;
         this.momento = momento;
         this.pedido = pedido;

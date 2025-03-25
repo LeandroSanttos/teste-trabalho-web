@@ -24,7 +24,7 @@ public class ItemPedido implements Serializable {
     public ItemPedido() {
     }
 
-    public ItemPedido(Pedido pedido, Produto produto, Integer quantidade, Double preco) {
+    public ItemPedido(Pedido pedido, Produto produto, Integer quantidade, Double preco) throws IllegalArgumentException {
         super();
         id.setPedido(pedido);
         id.setProduto(produto);

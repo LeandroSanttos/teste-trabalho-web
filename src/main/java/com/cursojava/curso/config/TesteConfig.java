@@ -15,6 +15,8 @@ import com.cursojava.curso.entities.Pedido;
 import com.cursojava.curso.entities.Produto;
 import com.cursojava.curso.entities.Usuario;
 import com.cursojava.curso.entities.enums.PedidoStatus;
+import com.cursojava.curso.negocios.ProdutoNegocio;
+import com.cursojava.curso.negocios.UsuarioNegocio;
 import com.cursojava.curso.repositories.CategoriaRepositorio;
 import com.cursojava.curso.repositories.ItemPedidoRepositorio;
 import com.cursojava.curso.repositories.PedidoRepositorio;
@@ -46,11 +48,13 @@ public class TesteConfig implements CommandLineRunner{
 		Categoria cat2 = new Categoria(null, "Livros");
 		Categoria cat3 = new Categoria(null, "Computadores");
 
-		Produto prdt1 = new Produto(null, "O Senhor dos Anéis", "História de aventura", 90.5, "");
-		Produto prdt2 = new Produto(null, "Smart TV", "TV 60 polegadas", 2190.0, "");
-		Produto prdt3 = new Produto(null, "Macbook Pro", "Computador portátil", 1250.0, "");
-		Produto prdt4 = new Produto(null, "PC Gamer", "Computador potente para jogos", 1200.0, "");
-		Produto prdt5 = new Produto(null, "Harry Potter", "Livro de aventura", 100.99, "");
+		ProdutoNegocio produtoNegocio = new ProdutoNegocio();
+
+		Produto prdt1 = produtoNegocio.novoProduto(null, "O Senhor dos Anéis", "História de aventura", 90.5, "");
+		Produto prdt2 = produtoNegocio.novoProduto(null, "Smart TV", "TV 60 polegadas", 2190.0, "");
+		Produto prdt3 = produtoNegocio.novoProduto(null, "Macbook Pro", "Computador portátil", 1250.0, "");
+		Produto prdt4 = produtoNegocio.novoProduto(null, "PC Gamer", "Computador potente para jogos", 1200.0, "");
+		Produto prdt5 = produtoNegocio.novoProduto(null, "Harry Potter", "Livro de aventura", 100.99, "");
 
 		categoriaRepositorio.saveAll(Arrays.asList(cat1, cat2, cat3));
 		produtoRepositorio.saveAll(Arrays.asList(prdt1, prdt2, prdt3, prdt4, prdt5));
@@ -65,9 +69,11 @@ public class TesteConfig implements CommandLineRunner{
 
 		produtoRepositorio.saveAll(Arrays.asList(prdt1, prdt2, prdt3, prdt4, prdt5));
 
-		Usuario u1 = new Usuario(null, "Maria Brown", "maria@gmail.com", "999999999", "12345");
-		Usuario u2 = new Usuario(null, "Alex Green", "alex@gmail.com", "988888888", "123456");
-		Usuario u3 = new Usuario(null, "Bob Brawn", "bob@gmail.com", "977777777", "123456");
+		UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+
+		Usuario u1 = usuarioNegocio.novoUsuario(0L, "Maria Brown", "maria@gmail.com", "999999999", "12345");
+		Usuario u2 = usuarioNegocio.novoUsuario(0L, "Alex Green", "alex@gmail.com", "988888888", "123456");
+		Usuario u3 = usuarioNegocio.novoUsuario(0L, "Bob Brawn", "bob@gmail.com", "977777777", "123456");
 
 		Pedido p1 = new Pedido(null, Instant.parse("2025-02-14T19:53:07Z"),PedidoStatus.PAGO, u1);
 		Pedido p2 = new Pedido(null, Instant.parse("2025-02-15T03:42:10Z"),PedidoStatus.AGUARDANDO_PAGAMENTO, u2);
