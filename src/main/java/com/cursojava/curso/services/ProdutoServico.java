@@ -62,7 +62,7 @@ public class ProdutoServico {
         }
     }
 
-    public Produto upadate(Long id, Produto obj) {
+    public Produto update(Long id, Produto obj) {
         try {
             Produto entidade = repositorio.getReferenceById(id);
             updateData(entidade, obj);
