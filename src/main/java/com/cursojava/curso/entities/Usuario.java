@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.cursojava.curso.entities.exceptions.LoginAtualizadoException;
-import com.cursojava.curso.entities.exceptions.LoginIncorretoException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -28,6 +26,7 @@ public class Usuario implements Serializable {
     private String email;
     private String telefone;
     private String senha;
+    private Boolean ativo;
 
     @JsonIgnore
     @OneToMany(mappedBy = "cliente")
@@ -42,31 +41,38 @@ public class Usuario implements Serializable {
         this.email = email;
         this.telefone = telefone;
         this.senha = senha;
+        this.ativo = false;
     }
 
-    public void mudarNome(String nome, String email, String senha, String novoNome) throws LoginIncorretoException, LoginAtualizadoException {
-        if (!nome.equalsIgnoreCase(this.getNome()) || !email.equalsIgnoreCase(this.getEmail()) || !senha.equals(this.getSenha())) {
-            throw new LoginIncorretoException("Nome, e-mail ou senha incorretos!");
+    /*public void mudarNome(String novoNome) throws LoginIncorretoException, LoginAtualizadoException {
+        if (!this.ativo) {
+            if (!nome.equalsIgnoreCase(this.getNome()) || !email.equalsIgnoreCase(this.getEmail()) || !senha.equals(this.getSenha())) {
+                throw new LoginIncorretoException("Nome, e-mail ou senha incorretos!");
+            }
         }
         setNome(novoNome);
         throw new LoginAtualizadoException("Nome atualizado com sucesso");
     }
 
-    public void mudarEmail(String nome, String email, String senha, String novoEmail) throws LoginIncorretoException, LoginAtualizadoException {
-        if (!nome.equalsIgnoreCase(this.getNome()) || !email.equalsIgnoreCase(this.getEmail()) || !senha.equals(this.getSenha())) {
-            throw new LoginIncorretoException("Nome, e-mail ou senha incorretos!");
+    public void mudarEmail(String novoEmail) throws LoginIncorretoException, LoginAtualizadoException {
+        if (!this.ativo) {
+            if (!nome.equalsIgnoreCase(this.getNome()) || !email.equalsIgnoreCase(this.getEmail()) || !senha.equals(this.getSenha())) {
+                throw new LoginIncorretoException("Nome, e-mail ou senha incorretos!");
+            }
         }
         setEmail(novoEmail);
         throw new LoginAtualizadoException("E-mail atualizado com sucesso");
     }
 
-    public void mudarSenha(String nome, String email, String senha, String novaSenha) throws LoginIncorretoException, LoginAtualizadoException {
-        if (!nome.equalsIgnoreCase(this.getNome()) || !email.equalsIgnoreCase(this.getEmail()) || !senha.equals(this.getSenha())) {
-            throw new LoginIncorretoException("Nome, e-mail ou senha incorretos!");
+    public void mudarSenha(String novaSenha) throws LoginIncorretoException, LoginAtualizadoException {
+        if (!this.ativo) {
+            if (!nome.equalsIgnoreCase(this.getNome()) || !email.equalsIgnoreCase(this.getEmail()) || !senha.equals(this.getSenha())) {
+                throw new LoginIncorretoException("Nome, e-mail ou senha incorretos!");
+            }
         }
         setSenha(novaSenha);
         throw new LoginAtualizadoException("Senha atualizada com sucesso");
-    }
+    }*/
 
     public Long getId() {
         return id;
@@ -110,6 +116,14 @@ public class Usuario implements Serializable {
 
     public List<Pedido> getPedidos() {
         return List.copyOf(pedidos);
+    }
+
+    public Boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 
 	@Override
