@@ -27,6 +27,7 @@ public class PedidoServico {
     public Pedido novoPedido(Long id, Instant momento, PedidoStatus pedidoStatus, Usuario client) {
         validarPedido(id, momento, pedidoStatus, client);
         Pedido novoPedido = new Pedido(id, momento, pedidoStatus, client);
+        repositorio.save(novoPedido);
         return novoPedido;
     }
 

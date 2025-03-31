@@ -70,6 +70,7 @@ public class UsuarioServico {
         validarCadastrarUsuario(id, nome, email, telefone, senha);
         Usuario cadastrarUsuario = new Usuario(null, nome, email, telefone, senha);
         Administracao.addEmailCadastrado(email);
+        repositorio.save(cadastrarUsuario);
         return cadastrarUsuario;
     }
 
@@ -89,6 +90,18 @@ public class UsuarioServico {
         if (senha == null || senha.trim().isEmpty()) {
             throw new IllegalArgumentException("Senha não pode ser vazia.");
         }
+    }
+
+    public Usuario validaLogin(String nome, String email, String senha) throws IllegalArgumentException {
+        for (Usuario usuario : repositorio.findAll()) {
+            if(usuario.getEmail().equals(email) && usuario.getSenha().equals(senha)) {
+                usuario.setSenha(senha);
+                return usuario;
+            }
+        }
+
+        throw new IllegalArgumentException("Não foi possível localizar o usuario "+nome+", ou a senha esta errada");
+
     }
 
     public List<Usuario> findAll() {

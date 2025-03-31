@@ -24,6 +24,7 @@ public class CategoriaServico {
     public Categoria cadastrarCategoria(Long id, String nome) {
         validarCategoria(id, nome);
         Categoria novaCategoria = new Categoria(id, nome);
+        repositorio.save(novaCategoria);
         return novaCategoria;
     }
 

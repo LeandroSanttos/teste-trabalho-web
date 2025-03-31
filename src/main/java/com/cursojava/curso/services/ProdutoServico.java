@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.cursojava.curso.entities.Categoria;
 import com.cursojava.curso.entities.Produto;
 import com.cursojava.curso.repositories.ProdutoRepositorio;
 import com.cursojava.curso.services.exceptions.DatabaseException;
@@ -24,6 +25,7 @@ public class ProdutoServico {
     public Produto cadastrarProduto(Long id, String nome, String descricao, Double preco, String img_URL) {
         validarProduto(id, nome, descricao, preco, img_URL);
         Produto novoProduto = new Produto(id, nome, descricao, preco, img_URL);
+        repositorio.save(novoProduto);
         return novoProduto;
     }
 
@@ -34,9 +36,15 @@ public class ProdutoServico {
         if (descricao == null || descricao.trim().isEmpty()) {
             throw new IllegalArgumentException("A descrição do produto não pode ser vazia.");
         }
-        if (preco <= 0) {
+        if (preco == null || preco <= 0) {
             throw new IllegalArgumentException("O preco do produto não pode ser 0 ou menor.");
         }
+    }
+
+    public Categoria addCategoria(Produto produto, Categoria categoria) {
+        produto.getCategorias().add(categoria);
+        repositorio.save(produto);
+        return categoria;
     }
 
     public List<Produto> findAll() {

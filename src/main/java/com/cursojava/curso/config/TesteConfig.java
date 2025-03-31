@@ -15,11 +15,9 @@ import com.cursojava.curso.entities.Pedido;
 import com.cursojava.curso.entities.Produto;
 import com.cursojava.curso.entities.Usuario;
 import com.cursojava.curso.entities.enums.PedidoStatus;
-import com.cursojava.curso.repositories.CategoriaRepositorio;
 import com.cursojava.curso.repositories.ItemPedidoRepositorio;
 import com.cursojava.curso.repositories.PedidoRepositorio;
 import com.cursojava.curso.repositories.ProdutoRepositorio;
-import com.cursojava.curso.repositories.UsuarioRepositorio;
 import com.cursojava.curso.services.CategoriaServico;
 import com.cursojava.curso.services.PedidoServico;
 import com.cursojava.curso.services.ProdutoServico;
@@ -28,15 +26,9 @@ import com.cursojava.curso.services.UsuarioServico;
 @Configuration
 @Profile("test")
 public class TesteConfig implements CommandLineRunner{
-	
-	@Autowired
-	private UsuarioRepositorio usuarioRepositorio;
 
 	@Autowired
 	private PedidoRepositorio pedidoRepositorio;
-
-	@Autowired
-	private CategoriaRepositorio categoriaRepositorio;
 
 	@Autowired
 	private ProdutoRepositorio produtoRepositorio;
@@ -44,15 +36,24 @@ public class TesteConfig implements CommandLineRunner{
 	@Autowired
 	private ItemPedidoRepositorio itemPedidoRepositorio;
 
+	@Autowired
+	private UsuarioServico usuarioServico;
+
+	@Autowired
+	private ProdutoServico produtoServico;
+
+	@Autowired
+	private PedidoServico pedidoServico;
+
+	@Autowired
+	private CategoriaServico categoriaServico;
+
 	@Override
 	public void run(String... args) throws Exception {
-		CategoriaServico categoriaServico = new CategoriaServico();
 
 		Categoria cat1 = categoriaServico.cadastrarCategoria(null, "Etrônicos");
 		Categoria cat2 = categoriaServico.cadastrarCategoria(null, "Livros");
 		Categoria cat3 = categoriaServico.cadastrarCategoria(null, "Computadores");
-
-		ProdutoServico produtoServico = new ProdutoServico();
 
 		Produto prdt1 = produtoServico.cadastrarProduto(null, "O Senhor dos Anéis", "História de aventura", 90.5, "");
 		Produto prdt2 = produtoServico.cadastrarProduto(null, "Smart TV", "TV 60 polegadas", 2190.0, "");
@@ -60,33 +61,20 @@ public class TesteConfig implements CommandLineRunner{
 		Produto prdt4 = produtoServico.cadastrarProduto(null, "PC Gamer", "Computador potente para jogos", 1200.0, "");
 		Produto prdt5 = produtoServico.cadastrarProduto(null, "Harry Potter", "Livro de aventura", 100.99, "");
 
-		categoriaRepositorio.saveAll(Arrays.asList(cat1, cat2, cat3));
-		produtoRepositorio.saveAll(Arrays.asList(prdt1, prdt2, prdt3, prdt4, prdt5));
-
-		prdt1.getCategorias().add(cat2);
-		prdt2.getCategorias().add(cat1);
-		prdt3.getCategorias().add(cat1);
-		prdt3.getCategorias().add(cat3);
-		prdt4.getCategorias().add(cat1);
-		prdt4.getCategorias().add(cat3);
-		prdt5.getCategorias().add(cat2);
-
-		produtoRepositorio.saveAll(Arrays.asList(prdt1, prdt2, prdt3, prdt4, prdt5));
-
-		UsuarioServico usuarioServico = new UsuarioServico();
+		produtoServico.addCategoria(prdt1, cat2);
+		produtoServico.addCategoria(prdt2, cat1);
+		produtoServico.addCategoria(prdt3, cat3);
+		produtoServico.addCategoria(prdt4, cat1);
+		//produtoServico.addCategoria(prdt4, cat3);
+		produtoServico.addCategoria(prdt5, cat2);
 
 		Usuario u1 = usuarioServico.cadastrarUsuario(0L, "Maria Brown", "maria@gmail.com", "999999999", "12345");
 		Usuario u2 = usuarioServico.cadastrarUsuario(0L, "Alex Green", "alex@gmail.com", "988888888", "123456");
 		Usuario u3 = usuarioServico.cadastrarUsuario(0L, "Bob Brawn", "bob@gmail.com", "977777777", "123456");
 
-		PedidoServico pedidoServico = new PedidoServico();
-
 		Pedido p1 = pedidoServico.novoPedido(null, Instant.parse("2025-02-14T19:53:07Z"),PedidoStatus.PAGO, u1);
 		Pedido p2 = pedidoServico.novoPedido(null, Instant.parse("2025-02-15T03:42:10Z"),PedidoStatus.AGUARDANDO_PAGAMENTO, u2);
 		Pedido p3 = pedidoServico.novoPedido(null, Instant.parse("2025-02-16T15:21:22Z"),PedidoStatus.AGUARDANDO_PAGAMENTO, u1);
-		
-		usuarioRepositorio.saveAll(Arrays.asList(u1, u2, u3));
-		pedidoRepositorio.saveAll(Arrays.asList(p1, p2, p3));
 
 		ItemPedido ipdd1 = new ItemPedido(p1, prdt1, 2, prdt1.getPreco());
 		ItemPedido ipdd2 = new ItemPedido(p1, prdt3, 1, prdt3.getPreco());
