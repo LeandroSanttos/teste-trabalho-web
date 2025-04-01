@@ -61,12 +61,12 @@ public class TesteConfig implements CommandLineRunner{
 		Produto prdt4 = produtoServico.cadastrarProduto(null, "PC Gamer", "Computador potente para jogos", 1200.0, "");
 		Produto prdt5 = produtoServico.cadastrarProduto(null, "Harry Potter", "Livro de aventura", 100.99, "");
 
-		produtoServico.addCategoria(prdt1, cat2);
-		produtoServico.addCategoria(prdt2, cat1);
-		produtoServico.addCategoria(prdt3, cat3);
-		produtoServico.addCategoria(prdt4, cat1);
-		//produtoServico.addCategoria(prdt4, cat3);
-		produtoServico.addCategoria(prdt5, cat2);
+		produtoServico.addCategoria(1L, 2L);
+		produtoServico.addCategoria(2L, 1L);
+		produtoServico.addCategoria(3L, 3L);
+		produtoServico.addCategoria(4L, 1L);
+		produtoServico.addCategoria(4L, 3L);
+		produtoServico.addCategoria(5L, 2L);
 
 		Usuario u1 = usuarioServico.cadastrarUsuario(0L, "Maria Brown", "maria@gmail.com", "999999999", "12345");
 		Usuario u2 = usuarioServico.cadastrarUsuario(0L, "Alex Green", "alex@gmail.com", "988888888", "123456");

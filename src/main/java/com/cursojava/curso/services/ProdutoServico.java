@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cursojava.curso.entities.Categoria;
 import com.cursojava.curso.entities.Produto;
+import com.cursojava.curso.repositories.CategoriaRepositorio;
 import com.cursojava.curso.repositories.ProdutoRepositorio;
 import com.cursojava.curso.services.exceptions.DatabaseException;
 import com.cursojava.curso.services.exceptions.ResourceNaoEncontradoException;
@@ -21,6 +23,9 @@ public class ProdutoServico {
 
     @Autowired
     private ProdutoRepositorio repositorio;
+
+    @Autowired
+    private CategoriaRepositorio repositorioCategoria;
 
     public Produto cadastrarProduto(Long id, String nome, String descricao, Double preco, String img_URL) {
         validarProduto(id, nome, descricao, preco, img_URL);
@@ -41,10 +46,14 @@ public class ProdutoServico {
         }
     }
 
-    public Categoria addCategoria(Produto produto, Categoria categoria) {
-        produto.getCategorias().add(categoria);
-        repositorio.save(produto);
-        return categoria;
+    @Transactional
+    public void addCategoria(Long idProduto, Long idCategoria) {
+        Produto produto = repositorio.findById(idProduto).orElseThrow(()-> new RuntimeException("Produto não encontrado"));
+        Categoria categoria = repositorioCategoria.findById(idCategoria).orElseThrow(()-> new RuntimeException("Categoria não encontrado"));
+        if (!produto.getCategorias().contains(categoria)) {
+            produto.getCategorias().add(categoria);
+            repositorio.save(produto);
+        }
     }
 
     public List<Produto> findAll() {
