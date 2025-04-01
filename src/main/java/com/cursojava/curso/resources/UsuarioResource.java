@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -54,5 +55,10 @@ public class UsuarioResource {
 	public ResponseEntity<Usuario> update(@PathVariable Long id, @RequestBody Usuario obj) {
 		obj = servico.update(id, obj);
 		return ResponseEntity.ok().body(obj);
+	}
+
+	@PutMapping(value = "/{id}/ativar")
+	public ResponseEntity<String> ativarConta(@RequestParam String token) {
+		return servico.validaLogin(token);
 	}
 }

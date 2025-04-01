@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,6 +28,7 @@ public class Usuario implements Serializable {
     private String telefone;
     private String senha;
     private Boolean ativo;
+    private String tokenAtivacao;
 
     @JsonIgnore
     @OneToMany(mappedBy = "cliente")
@@ -44,35 +46,9 @@ public class Usuario implements Serializable {
         this.ativo = false;
     }
 
-    /*public void mudarNome(String novoNome) throws LoginIncorretoException, LoginAtualizadoException {
-        if (!this.ativo) {
-            if (!nome.equalsIgnoreCase(this.getNome()) || !email.equalsIgnoreCase(this.getEmail()) || !senha.equals(this.getSenha())) {
-                throw new LoginIncorretoException("Nome, e-mail ou senha incorretos!");
-            }
-        }
-        setNome(novoNome);
-        throw new LoginAtualizadoException("Nome atualizado com sucesso");
+    public void gerarTokenAtivacao() {
+        this.tokenAtivacao = UUID.randomUUID().toString();
     }
-
-    public void mudarEmail(String novoEmail) throws LoginIncorretoException, LoginAtualizadoException {
-        if (!this.ativo) {
-            if (!nome.equalsIgnoreCase(this.getNome()) || !email.equalsIgnoreCase(this.getEmail()) || !senha.equals(this.getSenha())) {
-                throw new LoginIncorretoException("Nome, e-mail ou senha incorretos!");
-            }
-        }
-        setEmail(novoEmail);
-        throw new LoginAtualizadoException("E-mail atualizado com sucesso");
-    }
-
-    public void mudarSenha(String novaSenha) throws LoginIncorretoException, LoginAtualizadoException {
-        if (!this.ativo) {
-            if (!nome.equalsIgnoreCase(this.getNome()) || !email.equalsIgnoreCase(this.getEmail()) || !senha.equals(this.getSenha())) {
-                throw new LoginIncorretoException("Nome, e-mail ou senha incorretos!");
-            }
-        }
-        setSenha(novaSenha);
-        throw new LoginAtualizadoException("Senha atualizada com sucesso");
-    }*/
 
     public Long getId() {
         return id;
@@ -124,6 +100,14 @@ public class Usuario implements Serializable {
 
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public String getTokenAtivacao() {
+        return tokenAtivacao;
+    }
+
+    public void setTokenAtivacao(String tokenAtivacao) {
+        this.tokenAtivacao = tokenAtivacao;
     }
 
 	@Override

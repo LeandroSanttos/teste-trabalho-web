@@ -45,11 +45,15 @@ package com.cursojava.curso.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cursojava.curso.entities.Administracao;
 import com.cursojava.curso.entities.Usuario;
@@ -65,6 +69,9 @@ public class UsuarioServico {
 
     @Autowired
     private UsuarioRepositorio repositorio;
+    
+    @Autowired
+    private EmailServico emailServico;
 
     public Usuario cadastrarUsuario(Long id, String nome, String email, String telefone, String senha) throws EmailCadastradoException {
         validarCadastrarUsuario(id, nome, email, telefone, senha);
@@ -92,16 +99,28 @@ public class UsuarioServico {
         }
     }
 
-    public Usuario validaLogin(String nome, String email, String senha) throws IllegalArgumentException {
-        for (Usuario usuario : repositorio.findAll()) {
-            if(usuario.getEmail().equals(email) && usuario.getSenha().equals(senha)) {
-                usuario.setSenha(senha);
-                return usuario;
+    public ResponseEntity<String> validaLogin(String token) {
+        Usuario usuario = repositorio.findByTokenAtivacao(token);
+        if (usuario != null) {
+            if (usuario.isAtivo()) {
+                return ResponseEntity.badRequest().body("Sua conta já está ativa!");
             }
+
+            usuario.setAtivo(true);
+            repositorio.save(usuario);
+
+            String novoToken = UUID.randomUUID().toString();
+            usuario.setTokenAtivacao(novoToken);
+
+            usuario.setAtivo(true);
+            repositorio.save(usuario);
+
+            emailServico.enviarEmailAtivacao(usuario.getEmail(), novoToken);
+
+            return ResponseEntity.ok("Sua conta foi ativada com sucesso!");
+        } else {
+            return ResponseEntity.badRequest().body("Token inválido!");
         }
-
-        throw new IllegalArgumentException("Não foi possível localizar o usuario "+nome+", ou a senha esta errada");
-
     }
 
     public List<Usuario> findAll() {
@@ -143,3 +162,4 @@ public class UsuarioServico {
         entidade.setTelefone(obj.getTelefone());
     }
 }
+
